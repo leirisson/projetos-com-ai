@@ -4,7 +4,7 @@
   "description": "Analisador jurídico de contratos com streaming via LLM",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "build": "tsup src/server.ts --format cjs --dts"
   },
   "keywords": [],
@@ -18,7 +18,7 @@
     "@openrouter/sdk": "^0.12.79",
     "dotenv": "^17.4.2",
     "fastify": "^5.8.5",
-    "pdf-parse": "^2.4.5",
+    "pdf-parse": "^1.1.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {

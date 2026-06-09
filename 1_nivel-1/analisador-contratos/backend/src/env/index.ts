@@ -1,4 +1,4 @@
-import 'dotenv'
+import 'dotenv/config'
 import z from 'zod'
 
 
@@ -14,7 +14,9 @@ const envSchema = z.object({
 const _env = envSchema.safeParse(process.env)
 
 if(_env.error){
-    throw new Error("Erro ao carregar as variaveis de ambiente")
+    const erros = _env.error.message 
+
+    throw new Error(`Erro ao carregar as variaveis de ambiente: ${erros}`)
 }
 
 export const env = _env.data
