@@ -2,10 +2,47 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Analisador de Contratos</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-  <h1>Frontend em construção</h1>
-  <p>API disponível em <code>POST /analisar</code></p>
+  <div class="container">
+    <h1>Analisador de Contratos</h1>
+
+    <div class="form-group">
+      <label for="texto">Texto do contrato</label>
+      <textarea id="texto" placeholder="Cole aqui o texto do contrato..."></textarea>
+      <div class="char-count" id="charCount">0 / 80.000 caracteres (mínimo: 300)</div>
+    </div>
+
+    <div class="form-group">
+      <label for="arquivo">Ou faça upload de um PDF (máx. 10 MB)</label>
+      <input type="file" id="arquivo" accept=".pdf" />
+      <div class="file-name" id="fileName"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="modo">Tipo de análise</label>
+      <select id="modo">
+        <option value="resumo">Resumo executivo</option>
+        <option value="riscos">Pontos de risco</option>
+        <option value="obrigacoes">Obrigações das partes</option>
+      </select>
+    </div>
+
+    <button id="btnAnalisar">Analisar contrato</button>
+    <button id="btnParar" style="display:none">Parar</button>
+
+    <div class="resultado-header" id="resultadoHeader" style="display:none">
+      <h2>Análise</h2>
+      <button id="btnCopiar">Copiar</button>
+    </div>
+
+    <div id="resultado"></div>
+  </div>
+
+  <script src="/app.js"></script>
 </body>
 </html>
