@@ -1,0 +1,32 @@
+[
+  {
+    "pergunta": "Qual o horário de atendimento?",
+    "resposta": "Segunda a sexta, das 9h às 18h.",
+    "tags": ["horario", "atendimento"]
+  },
+  {
+    "pergunta": "Como faço para cancelar minha assinatura?",
+    "resposta": "Acesse sua conta, vá em Configurações > Assinatura e clique em Cancelar. O cancelamento é efetivo ao final do período pago.",
+    "tags": ["cancelamento", "assinatura"]
+  },
+  {
+    "pergunta": "Quais formas de pagamento são aceitas?",
+    "resposta": "Aceitamos cartão de crédito (Visa, Mastercard, Amex), boleto bancário e Pix.",
+    "tags": ["pagamento", "cartao", "pix", "boleto"]
+  },
+  {
+    "pergunta": "Como entro em contato com o suporte?",
+    "resposta": "Você pode entrar em contato pelo e-mail suporte@empresa.com ou pelo chat ao vivo disponível no site durante o horário de atendimento.",
+    "tags": ["suporte", "contato", "email"]
+  },
+  {
+    "pergunta": "Posso usar o serviço em vários dispositivos?",
+    "resposta": "Sim, você pode usar em até 3 dispositivos simultaneamente com uma única conta.",
+    "tags": ["dispositivos", "acesso", "conta"]
+  },
+  {
+    "pergunta": "Como faço para redefinir minha senha?",
+    "resposta": "Clique em 'Esqueci minha senha' na tela de login e siga as instruções enviadas para o seu e-mail cadastrado.",
+    "tags": ["senha", "login", "acesso"]
+  }
+]
