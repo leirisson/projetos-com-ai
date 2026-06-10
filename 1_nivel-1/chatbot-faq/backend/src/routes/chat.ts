@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
 import { FaqLoader } from "../faq";
 import { LlmService } from "../services/llm";
+import { HistoryService } from "../services/history";
 
 const MessageSchema = z.object({
   role: z.enum(["user", "assistant", "system"]),
@@ -10,13 +11,14 @@ const MessageSchema = z.object({
 
 const ChatRequestSchema = z.object({
   mensagens: z.array(MessageSchema).min(1, "mensagens não pode ser vazio"),
-  sessionId: z.string().min(1),
+  sessionId: z.string().optional(),
 });
 
 export async function chatRoutes(
   app: FastifyInstance,
   faqLoader: FaqLoader,
-  llmService: LlmService
+  llmService: LlmService,
+  historyService: HistoryService
 ) {
   app.post(
     "/chat",
@@ -30,20 +32,36 @@ export async function chatRoutes(
             ? "mensagens não pode ser vazio"
             : "mensagens é obrigatório e deve ser um array";
 
+        const origin = request.headers.origin;
+        if (origin) reply.header("Access-Control-Allow-Origin", origin);
         return reply.status(400).send({ error: message });
       }
 
-      const { mensagens } = parseResult.data;
+      const { mensagens, sessionId } = parseResult.data;
       const systemPrompt = buildSystemPrompt(faqLoader.toSystemPrompt());
 
+      const origin = request.headers.origin;
       reply.raw.writeHead(200, {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         Connection: "keep-alive",
+        ...(origin && { "Access-Control-Allow-Origin": origin }),
       });
+
+      // Salva a última mensagem do usuário antes de iniciar o stream
+      if (sessionId) {
+        const lastUserMsg = [...mensagens].reverse().find((m) => m.role === "user");
+        if (lastUserMsg) {
+          await historyService.upsertSession(sessionId).catch(() => {});
+          await historyService.saveMessage(sessionId, "user", lastUserMsg.content).catch(() => {});
+        }
+      }
+
+      let assistantReply = "";
 
       try {
         for await (const token of llmService.streamChat(mensagens, systemPrompt)) {
+          assistantReply += token;
           reply.raw.write(`data: ${token}\n\n`);
         }
         reply.raw.write("data: [DONE]\n\n");
@@ -51,6 +69,11 @@ export async function chatRoutes(
         reply.raw.write("data: [DONE]\n\n");
         reply.raw.end();
         return;
+      }
+
+      // Salva a resposta completa do assistente após o stream
+      if (sessionId && assistantReply) {
+        await historyService.saveMessage(sessionId, "assistant", assistantReply).catch(() => {});
       }
 
       reply.raw.end();

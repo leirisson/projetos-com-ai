@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+@theme inline {
+  --color-bg:          #0d0f12;
+  --color-surface:     #13161b;
+  --color-surface-2:   #1a1e26;
+  --color-border:      #252a35;
+  --color-border-subtle: #1e2330;
+  --color-amber:       #e8a045;
+  --color-amber-dim:   #b07830;
+  --color-amber-glow:  rgba(232, 160, 69, 0.12);
+  --color-text:        #d4d8e2;
+  --color-text-muted:  #5a6378;
+  --color-text-dim:    #3a4255;
+  --color-user-bubble: #1a2d4a;
+  --color-user-border: #1e3d6e;
+  --color-assistant-bubble: #13161b;
+  --color-green:       #4ade80;
+  --color-red:         #f87171;
+
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-sans: "Syne", ui-sans-serif, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar refinada */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-dim);
+}
+
+/* Animações */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes fade-slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes token-appear {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-slide-up {
+  animation: fade-slide-up 0.3s ease forwards;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+/* streaming-content: last child element fades in as new tokens arrive */
+.streaming-content.is-streaming > *:last-child {
+  animation: token-appear 0.18s ease-out forwards;
+}
+
+.cursor-blink::after {
+  content: "▋";
+  display: inline-block;
+  margin-left: 1px;
+  animation: blink-cursor 0.8s step-end infinite;
+  color: var(--color-amber);
+  font-size: 0.9em;
+}
