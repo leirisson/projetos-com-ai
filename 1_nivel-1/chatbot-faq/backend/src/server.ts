@@ -18,6 +18,7 @@ export function buildApp(prisma?: PrismaClient): FastifyInstance {
 
   const faqPath = path.resolve(__dirname, "../faq.json");
   const faqLoader = new FaqLoader(faqPath);
+  
   faqLoader.load();
 
   const llmService = new LlmService(apiKey);
